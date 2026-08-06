@@ -26,8 +26,14 @@ Landing page responsiva (Tailwind CSS) para marca de perfumes de luxo. Estética
 ## Verified
 - DOM 6663px, 5 product cards, 0 console errors. Footer bg graphite confirmado. Screenshots de todas as seções OK.
 
+## Implemented (Jun 2026 — iteração 2)
+- React Router: rota `/` (Home) e `/produto/:id` (detalhe). ScrollManager faz scroll-to-top e scroll-para-âncora (via Lenis) em troca de rota.
+- Página de detalhe do produto: imagem grande sticky, tagline, história, preço/volume/concentração, seletor de quantidade, botão "Adicionar à sacola" (estado + toast sonner), pirâmide olfativa (topo/coração/fundo), grade "Outras memórias". data.js expandido com esses campos.
+- Cards da coleção agora navegam para o detalhe (Link).
+- Menu mobile: hambúrguer com overlay fullscreen animado (framer-motion), links serifados, fecha ao navegar; nav sincroniza background quando aberto.
+- Toaster global (sonner) estilizado em grafite.
+
 ## Backlog (P1/P2)
-- P1: Página de produto individual / detalhe.
 - P2: Newsletter conectada a backend real (Resend).
-- P2: Menu mobile (hamburger) — nav links ocultos em < md.
+- P2: Sacola/carrinho persistente com contador no nav.
 - P2: Cursor customizado e transição de página.

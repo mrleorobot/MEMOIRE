@@ -1,10 +1,11 @@
 import { ArrowUpRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Reveal } from "./Reveal";
 import { PRODUCTS } from "../data";
 
 const Card = ({ p, spanClass, offsetClass = "" }) => (
   <Reveal className={`${spanClass} ${offsetClass}`}>
-    <a href="#" data-testid={`product-${p.id}`} className="group block">
+    <Link to={`/produto/${p.id}`} data-testid={`product-${p.id}`} className="group block">
       <div className={`relative overflow-hidden rounded-2xl bg-white/40 ${p.ratio}`}>
         <img
           src={p.img}
@@ -27,7 +28,7 @@ const Card = ({ p, spanClass, offsetClass = "" }) => (
           {p.family}
         </span>
       </div>
-    </a>
+    </Link>
   </Reveal>
 );
 

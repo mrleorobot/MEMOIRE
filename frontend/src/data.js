@@ -20,6 +20,17 @@ export const PRODUCTS = [
     family: "Oriental Amadeirado",
     img: IMAGES.amber,
     ratio: "aspect-[3/4]",
+    concentration: "Extrait de Parfum · 22%",
+    volume: "100 ml",
+    price: "R$ 890",
+    tagline: "A escuridão que aquece.",
+    story:
+      "Nascido de uma noite de inverno em Grasse, Âmbar Nocturno é a memória de uma lareira que se apaga lentamente. O âmbar cristalizado encontra a baunilha bourbon e a fumaça de incenso oriental, construindo um sillage que permanece na pele como brasa que recusa a extinguir-se.",
+    pyramid: {
+      topo: ["Bergamota da Calábria", "Pimenta Preta"],
+      coracao: ["Âmbar Cinza", "Rosa Turca", "Canela"],
+      fundo: ["Baunilha Bourbon", "Incenso", "Sândalo"],
+    },
   },
   {
     id: "rosa-cinza",
@@ -29,6 +40,17 @@ export const PRODUCTS = [
     family: "Floral Mineral",
     img: IMAGES.rose,
     ratio: "aspect-square",
+    concentration: "Eau de Parfum · 18%",
+    volume: "100 ml",
+    price: "R$ 760",
+    tagline: "Uma rosa esculpida em pedra.",
+    story:
+      "Rosa Cinza recusa o floral óbvio. A rosa de Damasco é despida de seu açúcar e assentada sobre musgo húmido e minerais frios, como uma flor esquecida sobre mármore. É a elegância da contenção — um floral que sussurra em vez de gritar.",
+    pyramid: {
+      topo: ["Pimenta Rosa", "Lichia"],
+      coracao: ["Rosa de Damasco", "Peônia", "Íris"],
+      fundo: ["Musgo de Carvalho", "Almíscar Branco", "Âmbar"],
+    },
   },
   {
     id: "vetiver-sombrio",
@@ -38,6 +60,17 @@ export const PRODUCTS = [
     family: "Amadeirado Seco",
     img: IMAGES.vetiver,
     ratio: "aspect-[3/4]",
+    concentration: "Extrait de Parfum · 24%",
+    volume: "100 ml",
+    price: "R$ 920",
+    tagline: "A terra depois da chuva.",
+    story:
+      "Extraído do vetiver haitiano mais raro, este perfume é a alma da terra molhada. Couro esfumaçado e cedro seco compõem uma estrutura austera e masculina, temperada por um toque terroso que evoca raízes recém-arrancadas do solo escuro.",
+    pyramid: {
+      topo: ["Toranja", "Cardamomo"],
+      coracao: ["Vetiver do Haiti", "Couro", "Gerânio"],
+      fundo: ["Cedro", "Vetiver Torrado", "Musgo"],
+    },
   },
   {
     id: "neroli-blanc",
@@ -47,6 +80,17 @@ export const PRODUCTS = [
     family: "Cítrico Floral",
     img: IMAGES.neroli,
     ratio: "aspect-square",
+    concentration: "Eau de Parfum · 16%",
+    volume: "100 ml",
+    price: "R$ 690",
+    tagline: "Luz engarrafada.",
+    story:
+      "Neroli Blanc captura a manhã mediterrânea: a flor de laranjeira colhida ao amanhecer, ainda húmida de orvalho. A bergamota da Calábria adiciona luminosidade cítrica, enquanto o almíscar branco prolonga o frescor numa aura translúcida e imaculada.",
+    pyramid: {
+      topo: ["Bergamota da Calábria", "Petitgrain"],
+      coracao: ["Flor de Laranjeira", "Néroli", "Jasmim"],
+      fundo: ["Almíscar Branco", "Cedro Branco", "Âmbar Claro"],
+    },
   },
   {
     id: "oud-celestial",
@@ -56,8 +100,21 @@ export const PRODUCTS = [
     family: "Oriental Precioso",
     img: IMAGES.oud,
     ratio: "aspect-[3/4]",
+    concentration: "Extrait de Parfum · 26%",
+    volume: "100 ml",
+    price: "R$ 1.480",
+    tagline: "O incenso dos deuses.",
+    story:
+      "A nossa composição mais preciosa. O oud de Assam, envelhecido por doze anos, é elevado pelo açafrão dourado e pelo âmbar cinza mais raro. Oud Celestial é uma catedral olfativa — profunda, resinosa e infinitamente complexa, feita em edição estritamente limitada.",
+    pyramid: {
+      topo: ["Açafrão", "Noz-moscada"],
+      coracao: ["Oud de Assam", "Rosa Búlgara", "Âmbar Cinza"],
+      fundo: ["Sândalo Mysore", "Patchouli", "Resina de Mirra"],
+    },
   },
 ];
+
+export const getProduct = (id) => PRODUCTS.find((p) => p.id === id);
 
 export const CHAPTERS = [
   {
