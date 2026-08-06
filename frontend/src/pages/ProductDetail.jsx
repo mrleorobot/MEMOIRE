@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowUpRight, Check, Plus, Minus } from "lucide-react";
-import { toast } from "sonner";
 import { getProduct, PRODUCTS } from "../data";
 import { Reveal } from "../components/Reveal";
+import { useBag } from "../context/BagContext";
 
 const EASE = [0.22, 1, 0.36, 1];
 
@@ -27,6 +27,7 @@ export default function ProductDetail() {
   const product = getProduct(id);
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
+  const { addItem, setOpen } = useBag();
 
   if (!product) {
     return (
@@ -46,10 +47,9 @@ export default function ProductDetail() {
   const others = PRODUCTS.filter((p) => p.id !== product.id).slice(0, 3);
 
   const addToBag = () => {
+    addItem(product, qty);
     setAdded(true);
-    toast.success(`${product.name} adicionado à sacola`, {
-      description: `${qty} × ${product.volume} — ${product.price}`,
-    });
+    setOpen(true);
     setTimeout(() => setAdded(false), 2500);
   };
 

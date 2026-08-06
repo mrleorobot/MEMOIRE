@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ShoppingBag } from "lucide-react";
+import { useBag } from "../context/BagContext";
 
-const LINKS = [
-  { label: "Coleção", to: "/#colecao" },
-  { label: "Manifesto", to: "/#manifesto" },
-  { label: "Ateliê", to: "/#atelie" },
+const SECTIONS = [
+  { label: "Coleção", id: "colecao" },
+  { label: "Manifesto", id: "manifesto" },
+  { label: "Ateliê", id: "atelie" },
 ];
 
 const EASE = [0.22, 1, 0.36, 1];
@@ -14,6 +15,9 @@ const EASE = [0.22, 1, 0.36, 1];
 export const Nav = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const { count, setOpen: setBagOpen } = useBag();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -27,6 +31,27 @@ export const Nav = () => {
       document.body.style.overflow = "";
     };
   }, [open]);
+
+  const goToSection = (id) => {
+    setOpen(false);
+    if (pathname !== "/") {
+      sessionStorage.setItem("memoire_scroll", id);
+      navigate("/");
+      return;
+    }
+    const scroll = () => {
+      const el = document.getElementById(id);
+      const l = window.__lenis;
+      if (l && el) l.scrollTo(el, { offset: -80, duration: 1.6 });
+      else if (el) el.scrollIntoView({ behavior: "smooth" });
+    };
+    scroll();
+  };
+
+  const openBag = () => {
+    setOpen(false);
+    setBagOpen(true);
+  };
 
   return (
     <>
@@ -43,27 +68,34 @@ export const Nav = () => {
       >
         <nav className="mx-auto max-w-[1600px] px-6 lg:px-12 h-20 flex items-center justify-between">
           {/* Desktop left */}
-          <div className="hidden md:flex items-center gap-10 flex-1">
-            {LINKS.slice(0, 2).map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
+          <div className="hidden md:flex items-center gap-8 flex-1">
+            {SECTIONS.slice(0, 2).map((l) => (
+              <button
+                key={l.id}
+                onClick={() => goToSection(l.id)}
                 data-testid={`nav-link-${l.label.toLowerCase()}`}
                 className="text-xs uppercase tracking-[0.22em] text-graphite/70 hover:text-graphite transition-colors duration-300"
               >
                 {l.label}
-              </Link>
+              </button>
             ))}
+            <Link
+              to="/descoberta"
+              data-testid="nav-link-descoberta"
+              className="text-xs uppercase tracking-[0.22em] text-graphite/70 hover:text-graphite transition-colors duration-300"
+            >
+              Descoberta
+            </Link>
           </div>
 
           {/* Mobile hamburger */}
           <button
             onClick={() => setOpen(true)}
             data-testid="mobile-menu-open"
-            className="md:hidden flex items-center justify-center -ml-1 h-10 w-10 text-graphite flex-1 justify-self-start"
+            className="md:hidden flex items-center h-10 w-10 text-graphite flex-1"
             aria-label="Abrir menu"
           >
-            <Menu size={22} className="mr-auto" />
+            <Menu size={22} />
           </button>
 
           <Link
@@ -74,25 +106,32 @@ export const Nav = () => {
             MÉMOIRE
           </Link>
 
-          <div className="hidden md:flex items-center gap-10 flex-1 justify-end">
-            <Link
-              to="/#atelie"
+          {/* Right */}
+          <div className="flex items-center gap-6 md:gap-8 flex-1 justify-end">
+            <button
+              onClick={() => goToSection("atelie")}
               data-testid="nav-link-atelie"
-              className="text-xs uppercase tracking-[0.22em] text-graphite/70 hover:text-graphite transition-colors duration-300"
+              className="hidden md:inline-block text-xs uppercase tracking-[0.22em] text-graphite/70 hover:text-graphite transition-colors duration-300"
             >
               Ateliê
-            </Link>
-            <Link
-              to="/#colecao"
-              data-testid="nav-shop"
-              className="text-xs uppercase tracking-[0.22em] border border-graphite px-5 py-2.5 hover:bg-graphite hover:text-cream transition-colors duration-500"
+            </button>
+            <button
+              onClick={openBag}
+              data-testid="nav-bag"
+              className="relative flex items-center justify-center h-10 w-10 hover:opacity-60 transition-opacity"
+              aria-label="Abrir sacola"
             >
-              Descobrir
-            </Link>
+              <ShoppingBag size={20} strokeWidth={1.5} />
+              {count > 0 && (
+                <span
+                  data-testid="bag-count"
+                  className="absolute -top-0.5 -right-0.5 h-5 min-w-[1.25rem] px-1 rounded-full bg-graphite text-cream text-[0.6rem] font-medium flex items-center justify-center"
+                >
+                  {count}
+                </span>
+              )}
+            </button>
           </div>
-
-          {/* Mobile right spacer to keep logo centered */}
-          <div className="md:hidden flex-1" />
         </nav>
       </motion.header>
 
@@ -120,39 +159,44 @@ export const Nav = () => {
             </div>
 
             <div className="px-6 pt-10 flex flex-col">
-              {LINKS.map((l, i) => (
-                <motion.div
-                  key={l.to}
+              {SECTIONS.map((l, i) => (
+                <motion.button
+                  key={l.id}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, ease: EASE, delay: 0.1 + i * 0.08 }}
-                  className="border-b border-hairline"
+                  onClick={() => goToSection(l.id)}
+                  data-testid={`mobile-link-${l.label.toLowerCase()}`}
+                  className="block py-6 font-serif text-4xl tracking-tight text-left border-b border-hairline"
                 >
-                  <Link
-                    to={l.to}
-                    onClick={() => setOpen(false)}
-                    data-testid={`mobile-link-${l.label.toLowerCase()}`}
-                    className="block py-6 font-serif text-4xl tracking-tight"
-                  >
-                    {l.label}
-                  </Link>
-                </motion.div>
+                  {l.label}
+                </motion.button>
               ))}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: EASE, delay: 0.1 + LINKS.length * 0.08 }}
-                className="mt-12"
+                transition={{ duration: 0.6, ease: EASE, delay: 0.1 + SECTIONS.length * 0.08 }}
+                className="border-b border-hairline"
               >
                 <Link
-                  to="/#colecao"
+                  to="/descoberta"
                   onClick={() => setOpen(false)}
-                  data-testid="mobile-shop"
-                  className="inline-block border border-graphite px-8 py-4 text-xs uppercase tracking-[0.22em] hover:bg-graphite hover:text-cream transition-colors duration-500"
+                  data-testid="mobile-link-descoberta"
+                  className="block py-6 font-serif text-4xl tracking-tight"
                 >
-                  Descobrir a coleção
+                  Descoberta
                 </Link>
               </motion.div>
+              <motion.button
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: EASE, delay: 0.1 + (SECTIONS.length + 1) * 0.08 }}
+                onClick={openBag}
+                data-testid="mobile-bag"
+                className="mt-12 inline-flex items-center gap-3 border border-graphite px-8 py-4 text-xs uppercase tracking-[0.22em] hover:bg-graphite hover:text-cream transition-colors duration-500 self-start"
+              >
+                <ShoppingBag size={16} /> Sacola ({count})
+              </motion.button>
             </div>
           </motion.div>
         )}

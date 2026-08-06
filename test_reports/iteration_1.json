@@ -1,0 +1,34 @@
+{
+  "summary": "Frontend-only testing of MÉMOIRE landing. Validated preloader, in-page smooth scroll (Coleção/Manifesto/Ateliê), Discover quiz (intense answers → 'Oud Celestial'), quiz add-to-bag / view / restart, bag drawer CRUD (inc/dec/remove/subtotal/checkout/persist via localStorage), and mobile menu (390px). All flows pass EXCEPT cross-route section scroll (clicking a nav section link from /produto/:id does not scroll to the target section on Home).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "Home / ScrollManager",
+        "issue": "When clicking nav-link-coleção/manifesto/atelie from /produto/:id, route changes to '/' but the page stays at scrollY=0 forever. sessionStorage 'memoire_scroll' is set by Nav and consumed by Home (setTimeout 450ms), but the deferred l.scrollTo(el, ...) never actually scrolls. Manual call to window.__lenis.scrollTo(document.getElementById('manifesto'), ...) after the fact DOES scroll correctly, so Lenis is alive/started. Likely race between App's ScrollManager useEffect running `l.scrollTo(0, {immediate:true})` on pathname change and Home's delayed scroll — ScrollManager may run after Home's timer (parent effect fires after child) or reset scroll while animation begins. Recommended fix: (a) handle the sessionStorage target inside ScrollManager itself instead of Home, running after the immediate reset, or (b) make ScrollManager skip the reset when sessionStorage 'memoire_scroll' is present, or (c) increase Home's setTimeout and/or force lenis.start()+scrollTo(el) in a rAF after the reset. Verified by logging: at t=200ms after click, pathname='/', __lenis exists, lenis.isStopped=false, manifesto element exists, but scrollY stays 0 for 3+ seconds.",
+        "selector": "[data-testid=\"nav-link-manifesto\"] from /produto/:id",
+        "priority": "HIGH"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Fix cross-route section scroll: ensure that after navigating from /produto/:id to /, the deferred scrollTo target actually animates to the requested section (colecao/manifesto/atelie). Consolidating scroll handling into ScrollManager (read sessionStorage there, skip the immediate reset when a target is present) is the cleanest fix."
+  ],
+  "critical_code_review_comments": [
+    "App.js ScrollManager unconditionally runs l.scrollTo(0, immediate:true) on every pathname change; this conflicts with Home.jsx's own sessionStorage-based scroll restore. Centralize the logic to avoid the race.",
+    "Preloader.jsx: `l.stop()` is called during render effect but `l.start()` only in onExitComplete->finish; if the preloader is ever unmounted before exit animation completes, Lenis could stay stopped. Consider guaranteeing start on cleanup.",
+    "Nav.jsx uses `setOpen` name collision: same identifier is used for local mobile menu state and bag setOpen (via alias). It works but is fragile.",
+    "BagContext parsePrice strips all non-digits — good, but works only because prices are integer BRL; a decimal price like 'R$ 1.480,50' would drop the cents."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a (frontend-only)", "frontend": "92% (11/12 flows)"},
+  "seed_data_creation": "None",
+  "should_call_test_agent_after_fix": true,
+  "should_main_agent_self_test": false,
+  "test_credentials": "N/A (no auth)",
+  "context_for_next_testing_agent": "Preloader is fine (~2.1s), smooth scroll on Home works (Lenis samples show clear intermediate frames 832→1087→1271→1316→1349...). Quiz intense path (index 2 on all 3 questions) correctly returns 'Oud Celestial'. Bag persists via localStorage 'memoire_bag' key. Only failure: cross-route -> section scroll. Re-run same Playwright flow after fix; specifically the scenario: goto /produto/ambar-nocturno, wait for preloader detached, click [data-testid='nav-link-manifesto'], then sample window.scrollY every 200ms for ~3s and confirm it rises toward document.getElementById('manifesto').getBoundingClientRect().top + window.scrollY - 80.",
+  "rca_of_the_issue": "Home.jsx uses sessionStorage + setTimeout(450ms) to trigger lenis.scrollTo(el). App.js ScrollManager also fires on pathname change with lenis.scrollTo(0, {immediate:true}). Instrumentation confirmed: after cross-route click, __lenis is running (isStopped=false), manifesto DOM exists, but scrollY never budges. A manual window.__lenis.scrollTo(el, ...) invoked from devtools DOES animate to y=4147. So the deferred scroll from Home's timer effectively never runs (or is canceled/overridden). Suspected: ScrollManager's parent-effect ordering or an intervening Lenis reset invalidates the queued animation. Fix by moving the sessionStorage read into ScrollManager and NOT calling scrollTo(0,immediate) when a pending section target is present, then calling l.scrollTo(target, {offset:-80, duration:1.4}) inside a requestAnimationFrame."
+}
