@@ -1,0 +1,19 @@
+{
+  "summary": "Retested cross-route section scroll fix and full regression of MÉMOIRE landing page. All 12 flows pass, including the previously failing cross-route smooth scroll from /produto/ambar-nocturno to home sections (manifesto, coleção, ateliê). No regressions detected.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (skipped)", "frontend": "100% (12/12)"},
+  "seed_data_creation": "None (frontend-only, localStorage 'memoire_bag' used and cleared between tests)",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Fix confirmed. Cross-route scroll: from /produto/ambar-nocturno clicking nav-link-manifesto navigates to '/' and Lenis-smooth-scrolls to y=3732 (target-80=3731.5) with 6 intermediate samples. Same behavior for nav-link-coleção (final=1364, target-80~1364) and nav-link-atelie (final=4850, target-80~4849.8). Home smooth scroll: 20 samples increasing 264->3732. Bag: add-to-bag on product => count=1, persists after F5 via localStorage, drawer opens; quiz-add-bag => count=2. Quiz /descoberta with 3x option index 2 returns 'Oud Celestial'. Preloader gone by ~3.8s. Mobile (390px): mobile-menu-open toggles [data-testid='mobile-menu'], mobile-link-manifesto scrolls smoothly (samples 296->4199 with 7 intermediates) and auto-closes menu. Note: mobile toggle testids are 'mobile-menu-open'/'mobile-menu-close' and links are 'mobile-link-{label}' (not 'mobile-nav-link-*').",
+  "rca_of_the_issue": "Previous cross-route scroll failure resolved by centralizing scroll logic in App.js ScrollManager: it reads sessionStorage 'memoire_scroll' set by Nav's goToSection when navigating from a non-home route, skips the default scrollTo(0) reset, and after 450ms + rAF calls window.__lenis.scrollTo(el, {offset:-80, duration:1.6}). Verified samples show smooth intermediate scrollY values landing within 0.5px of target-80."
+}

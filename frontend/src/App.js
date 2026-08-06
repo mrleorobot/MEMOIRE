@@ -15,14 +15,23 @@ import Discover from "@/pages/Discover";
 function ScrollManager() {
   const { pathname, hash } = useLocation();
   useEffect(() => {
-    if (hash) {
+    const pending = sessionStorage.getItem("memoire_scroll");
+    const targetId = hash ? hash.slice(1) : pending;
+    if (targetId) {
+      sessionStorage.removeItem("memoire_scroll");
+      let raf;
       const t = setTimeout(() => {
-        const el = document.getElementById(hash.slice(1));
-        const l = window.__lenis;
-        if (l && el) l.scrollTo(el, { offset: -80, duration: 1.6 });
-        else if (el) el.scrollIntoView({ behavior: "smooth" });
-      }, 140);
-      return () => clearTimeout(t);
+        raf = requestAnimationFrame(() => {
+          const el = document.getElementById(targetId);
+          const l = window.__lenis;
+          if (l && el) l.scrollTo(el, { offset: -80, duration: 1.6 });
+          else if (el) el.scrollIntoView({ behavior: "smooth" });
+        });
+      }, pending ? 450 : 140);
+      return () => {
+        clearTimeout(t);
+        if (raf) cancelAnimationFrame(raf);
+      };
     }
     const l = window.__lenis;
     if (l) l.scrollTo(0, { immediate: true });
