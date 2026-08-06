@@ -7,12 +7,20 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)'
       },
       colors: {
+        cream: '#F9F8F6',
+        graphite: '#1A1A1A',
+        ash: '#4A4A4A',
+        hairline: '#D1CFCA',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
