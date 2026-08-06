@@ -7,21 +7,19 @@
         "backend": {
             "root": "backend",
             "framework": "fastapi",
-            "entrypoint": "server.py"
+            "entrypoint": "server:app"
         }
     },
     "rewrites": [
         {
             "source": "/api(/.*)?",
             "destination": {
-                "type": "service",
                 "service": "backend"
             }
         },
         {
             "source": "/(.*)",
             "destination": {
-                "type": "service",
                 "service": "frontend"
             }
         }
