@@ -1,0 +1,124 @@
+{
+  "theme": "light",
+  "aesthetics": "Fine art, editorial, minimal luxury, high contrast (cream & graphite), award-worthy.",
+  "typography": {
+    "heading_font": "Playfair Display",
+    "body_font": "Inter",
+    "scale": {
+      "h1": "text-5xl sm:text-7xl lg:text-[8vw] leading-[0.9] tracking-tighter",
+      "h2": "text-3xl sm:text-5xl lg:text-6xl leading-tight tracking-tight",
+      "h3": "text-2xl sm:text-3xl leading-snug tracking-tight",
+      "body": "text-base md:text-lg leading-relaxed font-light",
+      "caption": "text-sm uppercase tracking-[0.2em] font-medium"
+    },
+    "notes": "H1 should be massive but bound by fluid typography (`text-[8vw]`). Avoid generic bold weights for headings; use `font-medium` or `font-normal` with Playfair Display to maintain elegance."
+  },
+  "colors": {
+    "background": "#F9F8F6",
+    "text": "#1A1A1A",
+    "border": "#D1CFCA",
+    "accent": "#4A4A4A",
+    "notes": "No pure white or pure black. Use the off-white cream background consistently. Borders should be extremely subtle."
+  },
+  "visual_enhancers": {
+    "corners": "rounded-2xl for main images, square for buttons/manifesto text blocks.",
+    "shadows": "No heavy drop shadows. Keep it flat, brutalist, and editorial. Use 1px borders instead.",
+    "hover_states": "Buttons must have a 1px solid graphite border and transparent background, filling with graphite black and turning text white on hover. Images require a very slow, subtle zoom-in (`hover:scale-105 transition-transform duration-[2000ms] ease-out`)."
+  },
+  "grids_and_layouts": {
+    "spacing": "Generous spacing. Use `py-24` to `py-32` between sections.",
+    "masonry": "Create an asymmetrical Tetris-like grid. E.g., combine `col-span-12 md:col-span-5` and `col-span-12 md:col-span-7` with massive gaps (`gap-16` or `gap-24`). Stagger the vertical alignments.",
+    "alignment": "Optical alignment over geometric. Text should breathe. Center the hero, but left-align the manifesto and masonry content."
+  },
+  "motion_and_interactions": {
+    "smooth_scroll": "MANDATORY: Use `@studio-freight/react-lenis` for premium momentum scrolling.",
+    "hero_reveal": "MANDATORY: Use `framer-motion` for a masked, line-by-line title reveal. Wrap lines in `overflow-hidden` and animate `y` from `100%` to `0%` with a custom cubic-bezier.",
+    "parallax": "Apply a subtle parallax effect to the hero image using `framer-motion` `useScroll` and `useTransform`.",
+    "marquee": "Use `react-fast-marquee`. Very slow speed, massive typography or uppercase small tracking font, separated by elegant bullet points."
+  },
+  "components": [
+    {
+      "name": "Navigation",
+      "description": "Minimalist sticky or fixed nav. Glassmorphism `backdrop-blur-xl bg-[#F9F8F6]/70` with a 1px delicate bottom border `border-black/5`. Logo centered, links distributed."
+    },
+    {
+      "name": "Kinetic Hero",
+      "description": "Giant centered Playfair Display title. Below or behind the title, an 80vh image container `rounded-2xl` with a subtle parallax image inside. Dark overlay ONLY if text is directly over the image, but preferred is text above the image or overlapping cleanly."
+    },
+    {
+      "name": "Asymmetrical Masonry Grid",
+      "description": "Product showcase. Images must vary in aspect ratio (portrait, landscape). Text underneath images with product names and abstract notes."
+    },
+    {
+      "name": "Numbered Manifesto Chapters",
+      "description": "Editorial section. Large numbers (e.g., '01', '02') paired with elegant paragraphs. High negative space."
+    },
+    {
+      "name": "Editorial Marquee",
+      "description": "Continuous scrolling ribbon. `react-fast-marquee`. Minimalist, low contrast text."
+    }
+  ],
+  "media": {
+    "image_urls": [
+      {
+        "url": "https://images.unsplash.com/photo-1743915834274-1bf63b14fd3a",
+        "category": "hero",
+        "description": "Dark aesthetic perfume bottle in nature, perfect for the main 80vh hero image."
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1644052023705-143c6817c97b",
+        "category": "masonry_large",
+        "description": "Perfume on top of an art book. Fine art editorial."
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1768025719875-48ed072f3084",
+        "category": "masonry_small",
+        "description": "Minimalist bottle on stone with cork."
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1761865544944-2c8da85c869e",
+        "category": "masonry_medium",
+        "description": "Perfume box and bottle on textured fabric."
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1743915834333-2d8ccf047ffc",
+        "category": "manifesto_accent",
+        "description": "Secondary dark bottle in forest for chapter breaks."
+      }
+    ],
+    "icons": "lucide-react"
+  },
+  "dependencies_to_install": [
+    "framer-motion",
+    "lucide-react",
+    "react-fast-marquee",
+    "@studio-freight/react-lenis",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "accessibility": {
+    "contrast": "Ensure the graphite text (#1A1A1A) on cream (#F9F8F6) passes APCA standards.",
+    "motion": "Respect `prefers-reduced-motion` for the Framer Motion reveals and Parallax.",
+    "testing": "All interactive elements (buttons, links) MUST include a `data-testid` attribute (e.g., `data-testid=\"hero-cta\"`)."
+  },
+  "instructions_to_main_agent": [
+    "You are building a React.js application with Tailwind CSS.",
+    "Use ONLY pure HTML/Tailwind for the layout structure. Do not wrap everything in Shadcn UI Cards; it restricts the editorial layout.",
+    "Set the global background in index.css to `#F9F8F6` and text to `#1A1A1A`.",
+    "For the hero reveal, map an array of words/lines inside a Framer Motion container with `overflow: hidden`, animating the `y` transform of the children.",
+    "The Masonry Grid must NOT be symmetrical. Use a standard grid but span items unevenly, e.g., `grid-cols-1 md:grid-cols-12` where item 1 takes `col-span-5` and item 2 takes `col-span-7`.",
+    "Ensure image containers have `overflow-hidden` so the very slow hover scale (`hover:scale-105 duration-[2000ms]`) doesn't break the layout.",
+    "Translate all text into Portuguese as requested (e.g., 'Descubra a Essência', 'Capítulo 01')."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "You tend to converge toward generic, 'on distribution' outputs. Avoid this: make creative, distinctive frontends that surprise and delight.",
+    "Don't make generic centered layouts and uniform styling.",
+    "Create depth through layered design elements with z-index hierarchy.",
+    "You MUST NOT apply universal transition. Eg: `transition: all`. Always add transitions for specific properties.",
+    "You MUST NOT center align the app container. Do not add `.App { text-align: center; }` in the css file.",
+    "Every interaction needs micro-animations - hover states, transitions, parallax effects, and entrance animations.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "Subtle grain textures or noise overlays separate good from extraordinary.",
+    "Missing categories (especially sponsor logos) = main agent will use placeholder text which is FORBIDDEN. Use the provided Unsplash URLs."
+  ]
+}
