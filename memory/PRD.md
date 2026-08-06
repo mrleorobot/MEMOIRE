@@ -33,7 +33,14 @@ Landing page responsiva (Tailwind CSS) para marca de perfumes de luxo. Estética
 - Menu mobile: hambúrguer com overlay fullscreen animado (framer-motion), links serifados, fecha ao navegar; nav sincroniza background quando aberto.
 - Toaster global (sonner) estilizado em grafite.
 
+## Implemented (Jun 2026 — iteração 3)
+- Preloader/abertura: tela full-screen grafite com revelação do nome "MÉMOIRE" letra a letra, some após ~2s a cada load/F5; trava scroll durante a abertura.
+- Rolagem suave corrigida: links do nav (Coleção/Manifesto/Ateliê) agora rolam suavemente via Lenis (não pulam). Lógica centralizada no ScrollManager (App.js) com suporte a scroll cross-route via sessionStorage.
+- Quiz "Descoberta de Aroma" (/descoberta): 3 perguntas, barra de progresso, resultado recomenda perfume por pontuação; botões adicionar à sacola / ver perfume / refazer.
+- Sacola persistente (BagContext + localStorage 'memoire_bag'): ícone com contador no topo, gaveta lateral animada com inc/dec/remover/subtotal (formato BRL)/finalizar; abre ao adicionar. ProductDetail e quiz usam a sacola.
+- Verificado por testing_agent: 12/12 flows (100%), sem regressões.
+
 ## Backlog (P1/P2)
 - P2: Newsletter conectada a backend real (Resend).
-- P2: Sacola/carrinho persistente com contador no nav.
+- P2: Checkout/pagamento real (hoje o "finalizar" é apenas toast client-side).
 - P2: Cursor customizado e transição de página.
