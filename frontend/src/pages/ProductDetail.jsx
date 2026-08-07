@@ -176,7 +176,7 @@ export default function ProductDetail() {
                   <img
                     src={p.img}
                     alt={p.name}
-                    className="h-full w-full object-cover transition-transform duration-[2200ms] ease-out group-hover:scale-105"
+                    className="h-full w-full object-cover transition-transform duration-[time:2.2s] ease-out group-hover:scale-105"
                   />
                 </div>
                 <div className="mt-4 flex items-center justify-between">

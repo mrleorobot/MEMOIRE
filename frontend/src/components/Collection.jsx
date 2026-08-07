@@ -10,7 +10,7 @@ const Card = ({ p, spanClass, offsetClass = "" }) => (
         <img
           src={p.img}
           alt={p.name}
-          className="h-full w-full object-cover transition-transform duration-[2200ms] ease-out group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-[time:2.2s] ease-out group-hover:scale-105"
         />
         <span className="absolute top-4 left-4 text-xs uppercase tracking-[0.2em] text-cream mix-blend-difference">
           {p.index}

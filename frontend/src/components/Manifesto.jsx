@@ -21,7 +21,7 @@ export const Manifesto = () => (
               <img
                 src={IMAGES.ingredients}
                 alt="Matérias-primas aromáticas sobre linho"
-                className="h-full w-full object-cover transition-transform duration-[2200ms] ease-out group-hover:scale-105"
+                className="h-full w-full object-cover transition-transform duration-[time:2.2s] ease-out group-hover:scale-105"
               />
             </Reveal>
           </div>
