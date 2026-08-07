@@ -1,27 +1,7 @@
 {
-    "services": {
-        "frontend": {
-            "root": "frontend",
-            "framework": "create-react-app"
-        },
-        "backend": {
-            "root": "backend",
-            "framework": "fastapi",
-            "entrypoint": "server:app"
-        }
-    },
-    "rewrites": [
-        {
-            "source": "/api(/.*)?",
-            "destination": {
-                "service": "backend"
-            }
-        },
-        {
-            "source": "/(.*)",
-            "destination": {
-                "service": "frontend"
-            }
-        }
-    ]
+  "version": 2,
+  "framework": "create-react-app",
+  "installCommand": "npm install --prefix frontend",
+  "buildCommand": "npm run build --prefix frontend",
+  "outputDirectory": "frontend/build"
 }
